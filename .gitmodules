@@ -1,0 +1,3 @@
+[submodule "deps/Sapphire"]
+	path = deps/Sapphire
+	url = https://github.com/SapphireServer/Sapphire.git
