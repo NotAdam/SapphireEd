@@ -1,3 +1,6 @@
 [submodule "deps/Sapphire"]
 	path = deps/Sapphire
 	url = https://github.com/SapphireServer/Sapphire.git
+[submodule "deps/imgui"]
+	path = deps/imgui
+	url = https://github.com/ocornut/imgui.git
