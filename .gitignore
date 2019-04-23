@@ -34,5 +34,3 @@
 \.idea/
 cmake-build*/
 deps/SDL2/
-
-src/editor/imgui/
