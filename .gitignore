@@ -33,6 +33,6 @@
 
 \.idea/
 cmake-build*/
-deps/external/
+deps/SDL2/
 
 src/editor/imgui/

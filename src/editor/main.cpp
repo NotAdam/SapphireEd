@@ -8,7 +8,7 @@
 //   the back-end itself (imgui_impl_vulkan.cpp), but should PROBABLY NOT be used by your own engine/app code.
 // Read comments in imgui_impl_vulkan.h.
 
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 #include "Rendering/Ext/imgui_impl_sdl.h"
 #include "Rendering/Ext/imgui_impl_vulkan.h"
 #include <stdio.h>          // printf, fprintf
@@ -349,8 +349,16 @@ int main( int, char** )
   // Setup window
   SDL_WindowFlags window_flags = ( SDL_WindowFlags ) ( SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE |
                                                        SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_MAXIMIZED );
-  SDL_Window* window = SDL_CreateWindow( "SapphireEd", SDL_WINDOWPOS_CENTERED,
+
+#ifdef _DEBUG
+  constexpr auto windowTitle = "SapphireEd DEBUG - " __TIMESTAMP__;
+#else
+  constexpr auto windowTitle = "SapphireEd";
+#endif
+
+  SDL_Window* window = SDL_CreateWindow( windowTitle, SDL_WINDOWPOS_CENTERED,
                                          SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags );
+
 
   // Setup Vulkan
   uint32_t extensions_count = 0;
