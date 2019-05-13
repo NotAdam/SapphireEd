@@ -826,8 +826,9 @@ bool    ImGui_ImplVulkan_Init(ImGui_ImplVulkan_InitInfo* info, VkRenderPass rend
     ImGuiViewport* main_viewport = ImGui::GetMainViewport();
     main_viewport->RendererUserData = IM_NEW(ImGuiViewportDataVulkan)();
 
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        ImGui_ImplVulkan_InitPlatformInterface();
+    // fix assert that occurs because the cleanup funcs aren't registered
+    //if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    ImGui_ImplVulkan_InitPlatformInterface();
 
     return true;
 }
