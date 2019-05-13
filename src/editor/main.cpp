@@ -537,11 +537,6 @@ int main( int, char** )
 
     editorMgr.onRender();
 
-    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if( show_demo_window )
-      ImGui::ShowDemoWindow( &show_demo_window );
-
-
     // Rendering
     ImGui::Render();
     memcpy( &wd->ClearValue.color.float32[ 0 ], &clear_color, 4 * sizeof( float ) );

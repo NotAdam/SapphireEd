@@ -3,7 +3,9 @@
 #include <imgui/imgui.h>
 
 #include <Component/IComponent.h>
-#include <Component/TestComponent/TestComponent.h>
+
+#include <Component/Debug/TestComponent/TestComponent.h>
+#include <Component/Debug/ImGuiDemo.h>
 
 using namespace Sapphire::Editor;
 
@@ -24,7 +26,8 @@ void EditorMgr::registerComponent( Component::ComponentPtr component )
 
 bool EditorMgr::init()
 {
-  registerComponent( std::make_unique< Component::TestComponent >() );
+  registerComponent( std::make_shared< Component::TestComponent >() );
+  registerComponent( std::make_shared< Component::ImGuiDemo >() );
 
   return true;
 }
