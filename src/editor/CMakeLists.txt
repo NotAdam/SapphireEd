@@ -3,7 +3,9 @@ project( SapphireEd )
 file( GLOB EDITOR_SOURCE_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
         *.cpp
         imgui/*.cpp
-        Rendering/Ext/*.cpp )
+        Rendering/Ext/*.cpp
+        Component/*.cpp
+        Component/TestComponent/*.cpp )
 
 add_executable( sapphire_ed ${EDITOR_SOURCE_FILES} )
 

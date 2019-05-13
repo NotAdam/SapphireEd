@@ -17,6 +17,8 @@
 #include <SDL_vulkan.h>
 #include <vulkan/vulkan.h>
 
+#include "EditorMgr.h"
+
 //#define IMGUI_UNLIMITED_FRAME_RATE
 #ifdef _DEBUG
 #define IMGUI_VULKAN_DEBUG_REPORT
@@ -383,10 +385,14 @@ int main( int, char** )
   ImGui_ImplVulkanH_Window* wd = &g_MainWindowData;
   SetupVulkanWindow( wd, surface, w, h );
 
+  // setup EditorMgr
+  Sapphire::Editor::EditorMgr editorMgr;
+  editorMgr.init();
+
   // Setup Dear ImGui context
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO();
-  ( void ) io;
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
   //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
   // Setup Dear ImGui style
@@ -416,7 +422,7 @@ int main( int, char** )
   // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
   // - Read 'misc/fonts/README.txt' for more instructions and details.
   // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-  //io.Fonts->AddFontDefault();
+  io.Fonts->AddFontDefault();
   //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
   //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
   //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
@@ -495,6 +501,42 @@ int main( int, char** )
     ImGui_ImplSDL2_NewFrame( window );
     ImGui::NewFrame();
 
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+    // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+    // because it would be confusing to have two docking targets within each others.
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->Pos);
+    ImGui::SetNextWindowSize(viewport->Size);
+    ImGui::SetNextWindowViewport(viewport->ID);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+      window_flags |= ImGuiWindowFlags_NoBackground;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("DockSpace", NULL, window_flags);
+    ImGui::PopStyleVar();
+    ImGui::PopStyleVar(2);
+
+    // DockSpace
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+      ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+      ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+    }
+
+    ImGui::End();
+
+    editorMgr.onRender();
+
     if (ImGui::BeginMainMenuBar())
     {
       if (ImGui::BeginMenu("Menu"))
@@ -522,31 +564,6 @@ int main( int, char** )
     if( show_demo_window )
       ImGui::ShowDemoWindow( &show_demo_window );
 
-    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-    {
-      static float f = 0.0f;
-      static int counter = 0;
-
-      ImGui::Begin(
-        "Hello, world!" );                          // Create a window called "Hello, world!" and append into it.
-
-      ImGui::Text( "This is some useful text." );               // Display some text (you can use a format strings too)
-      ImGui::Checkbox( "Demo Window", &show_demo_window );      // Edit bools storing our window open/close state
-
-      ImGui::SliderFloat( "float", &f, 0.0f, 1.0f );            // Edit 1 float using a slider from 0.0f to 1.0f
-      ImGui::ColorEdit3( "clear color", ( float* ) &clear_color ); // Edit 3 floats representing a color
-
-      if( ImGui::Button(
-        "Button" ) )                            // Buttons return true when clicked (most widgets return true when edited/activated)
-        counter++;
-      ImGui::SameLine();
-      ImGui::Text( "counter = %d", counter );
-
-      ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
-                   ImGui::GetIO().Framerate );
-      ImGui::End();
-    }
-
 
     // Rendering
     ImGui::Render();
@@ -555,6 +572,8 @@ int main( int, char** )
 
     FramePresent( wd );
   }
+
+  editorMgr.cleanup();
 
   // Cleanup
   err = vkDeviceWaitIdle( g_Device );
