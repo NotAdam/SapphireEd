@@ -13,7 +13,7 @@ add_executable( sapphire_ed ${EDITOR_SOURCE_FILES} )
 target_include_directories( sapphire_ed PUBLIC ${SDL2_INCLUDE_DIR} ${Vulkan_INCLUDE_DIR} )
 target_include_directories( sapphire_ed PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} )
 
-target_link_libraries( sapphire_ed SDL2 SDL2main ${Vulkan_LIBRARY} )
+target_link_libraries( sapphire_ed SDL2 SDL2main ${Vulkan_LIBRARY} xivdat )
 
 if( UNIX )
     cotire( sapphire_ed )

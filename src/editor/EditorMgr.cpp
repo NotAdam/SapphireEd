@@ -82,6 +82,11 @@ void EditorMgr::renderMenuBar()
       ImGui::EndMenu();
     }
 
+
+    // shitty hack to get right aligned text
+    ImGui::SetCursorPosX( ImGui::GetWindowContentRegionMax().x - 75 );
+    ImGui::Text( "%.1f FPS", ImGui::GetIO().Framerate );
+
     ImGui::EndMainMenuBar();
   }
 }

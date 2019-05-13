@@ -21,5 +21,13 @@ link_directories( ${SDL2_LIBRARY} )
 
 include_directories( "deps" )
 
+# sapphire deps
+add_subdirectory( "deps/sapphire/deps/zlib" )
+add_subdirectory( "deps/sapphire/deps/datReader" )
+
+# deps
+add_subdirectory( "deps/spdlog" )
+
 #
 add_subdirectory( "src/editor" )
+

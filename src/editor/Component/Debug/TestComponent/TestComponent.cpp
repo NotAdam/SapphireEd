@@ -7,6 +7,7 @@ using namespace Sapphire::Editor::Component;
 TestComponent::TestComponent() :
   IComponent( "TestComponent", "Debug/TestComponent" )
 {
+  m_isEnabled = false;
 }
 
 void TestComponent::onRender()
@@ -25,7 +26,5 @@ void TestComponent::onRender()
   ImGui::SameLine();
   ImGui::Text( "counter = %d", counter );
 
-  ImGui::Text( "Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
-               ImGui::GetIO().Framerate );
   ImGui::End();
 }
