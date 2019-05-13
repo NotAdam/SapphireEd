@@ -23,7 +23,7 @@ namespace Sapphire::Editor
     void registerComponent( Component::ComponentPtr component );
 
     bool init();
-    void cleanup();
+    void reset();
 
     void onRender();
 

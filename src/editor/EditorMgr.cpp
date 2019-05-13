@@ -15,9 +15,9 @@ void EditorMgr::registerComponent( Component::ComponentPtr component )
   auto menuPath = component->getMenuPath();
 
   // todo: so shit, doesn';t work for multilevel either
-  auto pos = menuPath.find_first_of('/');
-  auto menuCat = menuPath.substr(0, pos);
-  auto menuItem = menuPath.substr(pos + 1, menuPath.length() - 1);
+  auto pos = menuPath.find_first_of( '/' );
+  auto menuCat = menuPath.substr( 0, pos );
+  auto menuItem = menuPath.substr( pos + 1, menuPath.length() - 1 );
 
   m_menuMap[ menuCat ].emplace_back( std::make_pair( menuItem, component ) );
 
@@ -32,7 +32,7 @@ bool EditorMgr::init()
   return true;
 }
 
-void EditorMgr::cleanup()
+void EditorMgr::reset()
 {
   m_components.clear();
   m_menuMap.clear();
@@ -51,18 +51,12 @@ void EditorMgr::onRender()
 
 void EditorMgr::renderMenuBar()
 {
-  if (ImGui::BeginMainMenuBar())
+  if( ImGui::BeginMainMenuBar() )
   {
 
-    if (ImGui::BeginMenu("SapphireEd"))
+    if( ImGui::BeginMenu( "SapphireEd" ) )
     {
-      ImGui::EndMenu();
-    }
-    if (ImGui::BeginMenu("Examples"))
-    {
-      ImGui::MenuItem("Main menu bar", NULL, false);
-      ImGui::MenuItem("Console", NULL, false);
-      ImGui::MenuItem("Log", NULL, false);
+      ImGui::MenuItem( "Exit", NULL, false );
       ImGui::EndMenu();
     }
 
@@ -80,11 +74,11 @@ void EditorMgr::renderMenuBar()
       }
     }
 
-    if (ImGui::BeginMenu("Help"))
+    if( ImGui::BeginMenu( "Help" ) )
     {
-      ImGui::MenuItem("Metrics", NULL, false);
-      ImGui::MenuItem("Style Editor", NULL, false);
-      ImGui::MenuItem("About Dear ImGui", NULL, false);
+      ImGui::MenuItem( "Metrics", NULL, false );
+      ImGui::MenuItem( "Style Editor", NULL, false );
+      ImGui::MenuItem( "About Dear ImGui", NULL, false );
       ImGui::EndMenu();
     }
 
