@@ -537,29 +537,6 @@ int main( int, char** )
 
     editorMgr.onRender();
 
-    if (ImGui::BeginMainMenuBar())
-    {
-      if (ImGui::BeginMenu("Menu"))
-      {
-        ImGui::EndMenu();
-      }
-      if (ImGui::BeginMenu("Examples"))
-      {
-        ImGui::MenuItem("Main menu bar", NULL, false);
-        ImGui::MenuItem("Console", NULL, false);
-        ImGui::MenuItem("Log", NULL, false);
-        ImGui::EndMenu();
-      }
-      if (ImGui::BeginMenu("Help"))
-      {
-        ImGui::MenuItem("Metrics", NULL, false);
-        ImGui::MenuItem("Style Editor", NULL, false);
-        ImGui::MenuItem("About Dear ImGui", NULL, false);
-        ImGui::EndMenu();
-      }
-      ImGui::EndMainMenuBar();
-    }
-
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     if( show_demo_window )
       ImGui::ShowDemoWindow( &show_demo_window );

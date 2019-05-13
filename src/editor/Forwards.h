@@ -8,7 +8,7 @@ namespace Sapphire::Editor
   namespace Component
   {
     class IComponent;
-    using ComponentPtr = std::unique_ptr< IComponent >;
+    using ComponentPtr = std::shared_ptr< IComponent >;
   }
 }
 

@@ -2,6 +2,7 @@
 #define SAPPHIREED_EDITORMGR_H
 
 #include <vector>
+#include <unordered_map>
 
 #include "Forwards.h"
 #include "Component/IComponent.h"
@@ -13,6 +14,7 @@ namespace Sapphire::Editor
   class EditorMgr
   {
     std::vector< Component::ComponentPtr > m_components;
+    std::unordered_map< std::string, std::vector< std::pair< std::string, Component::ComponentPtr > > > m_menuMap;
 
   public:
     EditorMgr() = default;
@@ -24,6 +26,10 @@ namespace Sapphire::Editor
     void cleanup();
 
     void onRender();
+
+  private:
+
+    void renderMenuBar();
   };
 }
 
