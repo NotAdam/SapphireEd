@@ -12,14 +12,7 @@ using namespace Sapphire::Editor;
 void EditorMgr::registerComponent( Component::ComponentPtr component )
 {
   // setup menus
-  auto menuPath = component->getMenuPath();
-
-  // todo: so shit, doesn';t work for multilevel either
-  auto pos = menuPath.find_first_of( '/' );
-  auto menuCat = menuPath.substr( 0, pos );
-  auto menuItem = menuPath.substr( pos + 1, menuPath.length() - 1 );
-
-  m_menuMap[ menuCat ].emplace_back( std::make_pair( menuItem, component ) );
+  m_menuMap[ component->getMenuPath() ].emplace_back( std::make_pair( component->getName(), component ) );
 
   m_components.emplace_back( std::move( component ) );
 }
@@ -66,22 +59,15 @@ void EditorMgr::renderMenuBar()
       {
         for( auto& item : cat.second )
         {
-          if( ImGui::MenuItem( item.first.c_str(), NULL, item.second->isEnabled() ) )
-            item.second->setEnabled( !item.second->isEnabled() );
+          bool enabled = item.second->isEnabled();
+
+          if( ImGui::MenuItem( item.first.c_str(), NULL, enabled ) )
+            item.second->setEnabled( !enabled );
         }
 
         ImGui::EndMenu();
       }
     }
-
-    if( ImGui::BeginMenu( "Help" ) )
-    {
-      ImGui::MenuItem( "Metrics", NULL, false );
-      ImGui::MenuItem( "Style Editor", NULL, false );
-      ImGui::MenuItem( "About Dear ImGui", NULL, false );
-      ImGui::EndMenu();
-    }
-
 
     // shitty hack to get right aligned text
     ImGui::SetCursorPosX( ImGui::GetWindowContentRegionMax().x - 75 );

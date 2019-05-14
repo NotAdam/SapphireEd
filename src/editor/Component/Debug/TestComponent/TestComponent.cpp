@@ -5,7 +5,7 @@
 using namespace Sapphire::Editor::Component;
 
 TestComponent::TestComponent() :
-  IComponent( "TestComponent", "Debug/TestComponent" )
+  IComponent( "TestComponent", "Debug" )
 {
   m_isEnabled = false;
 }

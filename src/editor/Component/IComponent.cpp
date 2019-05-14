@@ -5,7 +5,7 @@ using namespace Sapphire::Editor::Component;
 IComponent::IComponent( std::string name ) :
   m_name( std::move( name ) )
 {
-  m_menuPath = "Tools/" + name;
+  m_menuPath = "Tools";
 }
 
 IComponent::IComponent( std::string name, std::string menuPath ) :
