@@ -4,7 +4,7 @@
 
 #include <Component/BaseComponent.h>
 
-#include <Component/Debug/TestComponent/TestComponent.h>
+#include <Component/Debug/ComponentDebug.h>
 #include <Component/Debug/ImGuiDemo.h>
 
 #include <Util/Logger.h>
@@ -19,7 +19,7 @@ EditorMgr::EditorMgr() :
 
 void EditorMgr::registerComponent( Component::ComponentPtr component )
 {
-  Logger::debug( "Registering component: {}", component->getName() );
+  Logger::debug( "Registering component: {} ({})", component->getName(), component->getId() );
 
   // setup menus
   m_menuMap[ component->getMenuPath() ].emplace_back( std::make_pair( component->getName(), component ) );
@@ -29,8 +29,21 @@ void EditorMgr::registerComponent( Component::ComponentPtr component )
 
 bool EditorMgr::init()
 {
-  registerComponent( std::make_shared< Component::TestComponent >() );
+  registerComponent( std::make_shared< Component::ComponentDebug >() );
   registerComponent( std::make_shared< Component::ImGuiDemo >() );
+
+  // inject this class and wake up components that init successfully
+  for( auto& component : m_components )
+  {
+    if( !component->init( shared_from_this() ) )
+    {
+      Logger::warn( "Failed to init component: {}", component->getName() );
+
+      continue;
+    }
+
+    component->onReady();
+  }
 
   return true;
 }
@@ -75,6 +88,10 @@ void EditorMgr::renderMenuBar()
 
     if( ImGui::BeginMenu( "SapphireEd" ) )
     {
+      ImGui::MenuItem( "Settings", NULL, false );
+
+      ImGui::Separator();
+
       if( ImGui::MenuItem( "Exit", NULL, false ) )
         shutdown();
 
@@ -103,4 +120,9 @@ void EditorMgr::renderMenuBar()
 
     ImGui::EndMainMenuBar();
   }
+}
+
+EditorMgr::ComponentList EditorMgr::getComponents() const
+{
+  return m_components;
 }

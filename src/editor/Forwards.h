@@ -10,6 +10,9 @@ namespace Sapphire::Editor
     class BaseComponent;
     using ComponentPtr = std::shared_ptr< BaseComponent >;
   }
+
+  class EditorMgr;
+  using EditorMgrPtr = std::shared_ptr< EditorMgr >;
 }
 
 #endif //SAPPHIREED_FORWARDS_H

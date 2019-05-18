@@ -19,3 +19,11 @@ target_link_libraries( sapphire_ed SDL2 SDL2main ${Vulkan_LIBRARY} xivdat )
 if( UNIX )
     cotire( sapphire_ed )
 endif()
+
+file( MAKE_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/fonts )
+
+add_custom_command(
+        TARGET sapphire_ed POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/fonts
+        ${EXECUTABLE_OUTPUT_PATH}/fonts )

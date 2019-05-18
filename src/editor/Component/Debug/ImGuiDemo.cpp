@@ -5,10 +5,11 @@
 using namespace Sapphire::Editor::Component;
 
 ImGuiDemo::ImGuiDemo() :
-  BaseComponent( "ImGui Demo", "Debug" )
+  BaseComponent( "ImGui Demo", DEBUG_MENU_CATEGORY )
 {
   // hide by default
   m_isEnabled = false;
+  m_id = typeid( this ).hash_code();
 }
 
 void ImGuiDemo::onRender()

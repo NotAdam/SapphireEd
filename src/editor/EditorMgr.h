@@ -11,9 +11,11 @@ using namespace Sapphire::Editor;
 
 namespace Sapphire::Editor
 {
-  class EditorMgr
+  class EditorMgr : public std::enable_shared_from_this< EditorMgr >
   {
-    std::vector< Component::ComponentPtr > m_components;
+    using ComponentList = std::vector< Component::ComponentPtr >;
+
+    ComponentList m_components;
     std::unordered_map< std::string, std::vector< std::pair< std::string, Component::ComponentPtr > > > m_menuMap;
 
     bool m_isRunning;
@@ -30,6 +32,8 @@ namespace Sapphire::Editor
     bool isRunning();
 
     void onRender();
+
+    ComponentList getComponents() const;
 
   private:
 
