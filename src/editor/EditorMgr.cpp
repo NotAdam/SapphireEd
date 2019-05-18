@@ -2,15 +2,25 @@
 
 #include <imgui/imgui.h>
 
-#include <Component/IComponent.h>
+#include <Component/BaseComponent.h>
 
 #include <Component/Debug/TestComponent/TestComponent.h>
 #include <Component/Debug/ImGuiDemo.h>
 
+#include <Util/Logger.h>
+
 using namespace Sapphire::Editor;
+
+EditorMgr::EditorMgr() :
+  m_isRunning( true )
+{
+  Logger::init( "log/editor" );
+}
 
 void EditorMgr::registerComponent( Component::ComponentPtr component )
 {
+  Logger::debug( "Registering component: {}", component->getName() );
+
   // setup menus
   m_menuMap[ component->getMenuPath() ].emplace_back( std::make_pair( component->getName(), component ) );
 
@@ -25,10 +35,26 @@ bool EditorMgr::init()
   return true;
 }
 
-void EditorMgr::reset()
+void EditorMgr::shutdown()
 {
+  assert( m_isRunning );
+
+  Logger::info( "Shutting down editor..." );
+
+  for( auto& component : m_components )
+  {
+    component->onShutdown();
+  }
+
+  m_isRunning = false;
+
   m_components.clear();
   m_menuMap.clear();
+}
+
+bool EditorMgr::isRunning()
+{
+  return m_isRunning;
 }
 
 void EditorMgr::onRender()
@@ -49,7 +75,9 @@ void EditorMgr::renderMenuBar()
 
     if( ImGui::BeginMenu( "SapphireEd" ) )
     {
-      ImGui::MenuItem( "Exit", NULL, false );
+      if( ImGui::MenuItem( "Exit", NULL, false ) )
+        shutdown();
+
       ImGui::EndMenu();
     }
 

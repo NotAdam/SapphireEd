@@ -27,6 +27,7 @@ add_subdirectory( "deps/sapphire/deps/datReader" )
 
 # deps
 add_subdirectory( "deps/spdlog" )
+include_directories( "deps/spdlog/include" )
 
 #
 add_subdirectory( "src/editor" )

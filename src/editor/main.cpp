@@ -463,8 +463,7 @@ int main( int, char** )
   ImVec4 clear_color = ImVec4( 0.45f, 0.55f, 0.60f, 1.00f );
 
   // Main loop
-  bool done = false;
-  while( !done )
+  while( editorMgr.isRunning() )
   {
     // Poll and handle events (inputs, window resize, etc.)
     // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -476,7 +475,7 @@ int main( int, char** )
     {
       ImGui_ImplSDL2_ProcessEvent( &event );
       if( event.type == SDL_QUIT )
-        done = true;
+        editorMgr.shutdown();
       if( event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED &&
           event.window.windowID == SDL_GetWindowID( window ) )
       {
@@ -543,8 +542,6 @@ int main( int, char** )
 
     FramePresent( wd );
   }
-
-  editorMgr.reset();
 
   // Cleanup
   err = vkDeviceWaitIdle( g_Device );

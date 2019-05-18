@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #include "Forwards.h"
-#include "Component/IComponent.h"
+#include "Component/BaseComponent.h"
 
 using namespace Sapphire::Editor;
 
@@ -16,14 +16,18 @@ namespace Sapphire::Editor
     std::vector< Component::ComponentPtr > m_components;
     std::unordered_map< std::string, std::vector< std::pair< std::string, Component::ComponentPtr > > > m_menuMap;
 
+    bool m_isRunning;
+
   public:
-    EditorMgr() = default;
+    EditorMgr();
     virtual ~EditorMgr() = default;
 
     void registerComponent( Component::ComponentPtr component );
 
     bool init();
-    void reset();
+    void shutdown();
+
+    bool isRunning();
 
     void onRender();
 

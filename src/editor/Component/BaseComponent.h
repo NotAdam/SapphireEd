@@ -1,11 +1,11 @@
-#ifndef SAPPHIREED_ICOMPONENT_H
-#define SAPPHIREED_ICOMPONENT_H
+#ifndef SAPPHIREED_BASECOMPONENT_H
+#define SAPPHIREED_BASECOMPONENT_H
 
 #include <string>
 
 namespace Sapphire::Editor::Component
 {
-  class IComponent
+  class BaseComponent
   {
   protected:
     std::string m_name;
@@ -14,12 +14,13 @@ namespace Sapphire::Editor::Component
     bool m_isEnabled;
 
   public:
-    explicit IComponent( std::string name );
-    IComponent( std::string name, std::string menuPath );
+    explicit BaseComponent( std::string name );
+    BaseComponent( std::string name, std::string menuPath );
 
-    virtual ~IComponent() = default;
+    virtual ~BaseComponent() = default;
 
     virtual void onRender() = 0;
+    virtual void onShutdown();
 
     const std::string& getName() const;
     void setName( const std::string& name );
@@ -32,4 +33,4 @@ namespace Sapphire::Editor::Component
   };
 }
 
-#endif //SAPPHIREED_ICOMPONENT_H
+#endif //SAPPHIREED_BASECOMPONENT_H

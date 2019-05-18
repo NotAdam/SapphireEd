@@ -1,11 +1,11 @@
 #ifndef SAPPHIREED_IMGUIDEMO_H
 #define SAPPHIREED_IMGUIDEMO_H
 
-#include <Component/IComponent.h>
+#include <Component/BaseComponent.h>
 
 namespace Sapphire::Editor::Component
 {
-class ImGuiDemo : public Sapphire::Editor::Component::IComponent
+class ImGuiDemo : public Sapphire::Editor::Component::BaseComponent
 {
 public:
   ImGuiDemo();

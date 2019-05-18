@@ -5,7 +5,7 @@
 using namespace Sapphire::Editor::Component;
 
 ImGuiDemo::ImGuiDemo() :
-  IComponent( "ImGui Demo", "Debug" )
+  BaseComponent( "ImGui Demo", "Debug" )
 {
   // hide by default
   m_isEnabled = false;
