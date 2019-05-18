@@ -5,13 +5,13 @@
 
 namespace Sapphire::Editor::Component
 {
-class ImGuiDemo : public Sapphire::Editor::Component::BaseComponent
-{
-public:
-  ImGuiDemo();
+  class ImGuiDemo : public Sapphire::Editor::Component::BaseComponent
+  {
+  public:
+    ImGuiDemo();
 
-  void onRender() override;
-};
+    void onRender() override;
+  };
 }
 
 #endif //SAPPHIREED_IMGUIDEMO_H

@@ -20,6 +20,7 @@ namespace Sapphire::Editor::Component
 
   public:
     static constexpr auto DEBUG_MENU_CATEGORY = "Debug";
+    static constexpr auto EXD_MENU_CATEGORY = "EXD";
 
     explicit BaseComponent( std::string name );
     BaseComponent( std::string name, std::string menuPath );

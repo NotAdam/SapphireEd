@@ -15,4 +15,19 @@ namespace Sapphire::Editor
   using EditorMgrPtr = std::shared_ptr< EditorMgr >;
 }
 
+namespace xiv
+{
+  namespace dat
+  {
+    class GameData;
+    using GameDataPtr = std::shared_ptr< GameData >;
+  }
+
+  namespace exd
+  {
+    class ExdData;
+    using ExdDataPtr = std::shared_ptr< ExdData >;
+  }
+}
+
 #endif //SAPPHIREED_FORWARDS_H

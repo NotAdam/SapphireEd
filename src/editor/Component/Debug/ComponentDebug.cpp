@@ -15,6 +15,7 @@ ComponentDebug::ComponentDebug() :
 
 void ComponentDebug::onRender()
 {
+  ImGui::SetNextWindowSize( ImVec2( 600, 450 ), ImGuiCond_FirstUseEver );
   ImGui::Begin( m_name.c_str(), &m_isEnabled );
 
   ImGui::Text( "Loaded components:" );

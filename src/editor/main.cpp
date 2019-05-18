@@ -478,7 +478,7 @@ int main( int, char** )
       ImGui_ImplSDL2_ProcessEvent( &event );
       if( event.type == SDL_QUIT )
         editorMgr->shutdown();
-      if( event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED &&
+      if( event.type == SDL_WINDOWEVENT /*&& event.window.event == SDL_WINDOWEVENT_RESIZED*/ &&
           event.window.windowID == SDL_GetWindowID( window ) )
       {
         g_SwapChainResizeWidth = ( int ) event.window.data1;
@@ -499,46 +499,9 @@ int main( int, char** )
     // Start the Dear ImGui frame
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplSDL2_NewFrame( window );
-    ImGui::NewFrame();
-
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
-    // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-    // because it would be confusing to have two docking targets within each others.
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos( viewport->Pos );
-    ImGui::SetNextWindowSize( viewport->Size );
-    ImGui::SetNextWindowViewport( viewport->ID );
-    ImGui::PushStyleVar( ImGuiStyleVar_WindowRounding, 0.0f );
-    ImGui::PushStyleVar( ImGuiStyleVar_WindowBorderSize, 0.0f );
-    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
-    // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-    if( dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode )
-      window_flags |= ImGuiWindowFlags_NoBackground;
-
-    ImGui::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2( 0.0f, 0.0f ) );
-    ImGui::Begin( "DockSpace", NULL, window_flags );
-    ImGui::PopStyleVar();
-    ImGui::PopStyleVar( 2 );
-
-    // DockSpace
-    ImGuiIO& io = ImGui::GetIO();
-    if( io.ConfigFlags & ImGuiConfigFlags_DockingEnable )
-    {
-      ImGuiID dockspace_id = ImGui::GetID( "DockSpace" );
-      ImGui::DockSpace( dockspace_id, ImVec2( 0.0f, 0.0f ), dockspace_flags );
-    }
-
-    ImGui::End();
 
     editorMgr->onRender();
 
-    // Rendering
-    ImGui::Render();
     memcpy( &wd->ClearValue.color.float32[ 0 ], &clear_color, 4 * sizeof( float ) );
     FrameRender( wd );
 
