@@ -25,6 +25,10 @@ namespace Sapphire::Editor
     xiv::dat::GameDataPtr m_gameData;
     xiv::exd::ExdDataPtr m_exdData;
 
+    bool m_isSettingsUIOpen;
+
+    ConfigMgrPtr m_configMgr;
+
   public:
     EditorMgr();
     virtual ~EditorMgr() = default;
@@ -32,7 +36,7 @@ namespace Sapphire::Editor
     void registerComponent( Component::ComponentPtr component );
 
     bool init();
-    void shutdown();
+    void shutdown( bool exitEditor = true );
 
     bool isRunning();
 
@@ -46,6 +50,7 @@ namespace Sapphire::Editor
   private:
 
     void renderMenuBar();
+    void renderSettingsUI();
   };
 }
 

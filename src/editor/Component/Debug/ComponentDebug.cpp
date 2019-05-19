@@ -9,7 +9,6 @@ using namespace Sapphire::Editor::Component;
 ComponentDebug::ComponentDebug() :
   BaseComponent( "Components", DEBUG_MENU_CATEGORY )
 {
-  m_isEnabled = false;
   m_id = typeid( this ).hash_code();
 }
 

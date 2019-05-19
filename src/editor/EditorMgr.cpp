@@ -1,24 +1,30 @@
 #include "EditorMgr.h"
 
 #include <imgui/imgui.h>
+#include <nlohmann/json.hpp>
+
+#include <Util/Logger.h>
+#include "ConfigMgr.h"
 
 #include <Component/BaseComponent.h>
 
 #include <Component/Debug/ComponentDebug.h>
 #include <Component/Debug/ImGuiDemo.h>
-#include <Component/Exd/ExdViewer.h>
-
-#include <Util/Logger.h>
+#include <Component/Tools/ExdViewer.h>
 
 #include <Sapphire/deps/datReader/GameData.h>
 #include <Sapphire/deps/datReader/ExdData.h>
+#include <Component/Tools/LevelInspector.h>
 
 using namespace Sapphire::Editor;
 
 EditorMgr::EditorMgr() :
-  m_isRunning( true )
+  m_isRunning( true ),
+  m_isSettingsUIOpen( false )
 {
   Logger::init( "log/editor" );
+
+  m_configMgr = std::make_shared< ConfigMgr >();
 }
 
 void EditorMgr::registerComponent( Component::ComponentPtr component )
@@ -34,12 +40,24 @@ void EditorMgr::registerComponent( Component::ComponentPtr component )
 
 bool EditorMgr::init()
 {
+  Logger::debug( "Warming up editor components..." );
+
   // init gamedata
-  m_gameData = std::make_shared< xiv::dat::GameData >( "C:/Program Files (x86)/Steam/steamapps/common/FINAL FANTASY XIV Online/game/sqpack" );
-  m_exdData = std::make_shared< xiv::exd::ExdData >( *m_gameData );
+  try
+  {
+    auto path = m_configMgr->getConfig( "editor" ).at( "dataPath" ).get< std::string >();
+    m_gameData = std::make_shared< xiv::dat::GameData >( path );
+    m_exdData = std::make_shared< xiv::exd::ExdData >( *m_gameData );
+  }
+  catch( const std::exception& e )
+  {
+    Logger::error( "Failed to init game data, check the path set in config.", e.what() );
+    return false;
+  }
 
   // regular components
   registerComponent( std::make_shared< Component::ExdViewer >() );
+  registerComponent( std::make_shared< Component::LevelInspector >() );
 
   // debug components
   registerComponent( std::make_shared< Component::ComponentDebug >() );
@@ -61,7 +79,7 @@ bool EditorMgr::init()
   return true;
 }
 
-void EditorMgr::shutdown()
+void EditorMgr::shutdown( bool exitEditor )
 {
   assert( m_isRunning );
 
@@ -72,7 +90,8 @@ void EditorMgr::shutdown()
     component->onShutdown();
   }
 
-  m_isRunning = false;
+  if( exitEditor )
+    m_isRunning = false;
 
   m_components.clear();
   m_componentIdToPtrMap.clear();
@@ -141,11 +160,18 @@ void EditorMgr::renderMenuBar()
 
     if( ImGui::BeginMenu( "SapphireEd" ) )
     {
-      ImGui::MenuItem( "Settings", NULL, false );
+      if( ImGui::MenuItem( "Settings", nullptr, m_isSettingsUIOpen ) )
+        m_isSettingsUIOpen = !m_isSettingsUIOpen;
+
+      if( ImGui::MenuItem( "Reload Components", nullptr ) )
+      {
+        shutdown( false );
+        init();
+      }
 
       ImGui::Separator();
 
-      if( ImGui::MenuItem( "Exit", NULL, false ) )
+      if( ImGui::MenuItem( "Exit", nullptr, false ) )
         shutdown();
 
       ImGui::EndMenu();
@@ -159,7 +185,7 @@ void EditorMgr::renderMenuBar()
         {
           bool enabled = item.second->isEnabled();
 
-          if( ImGui::MenuItem( item.first.c_str(), NULL, enabled ) )
+          if( ImGui::MenuItem( item.first.c_str(), nullptr, enabled ) )
             item.second->setEnabled( !enabled );
         }
 
@@ -173,6 +199,13 @@ void EditorMgr::renderMenuBar()
 
     ImGui::EndMainMenuBar();
   }
+}
+
+void EditorMgr::renderSettingsUI()
+{
+  ImGui::Begin( "Settings", &m_isSettingsUIOpen );
+
+  ImGui::End();
 }
 
 EditorMgr::ComponentList& EditorMgr::getComponents()

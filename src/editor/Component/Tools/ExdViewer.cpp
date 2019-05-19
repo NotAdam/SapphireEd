@@ -20,7 +20,7 @@
 using namespace Sapphire::Editor::Component;
 
 ExdViewer::ExdViewer() :
-  BaseComponent( "EXD Viewer", EXD_MENU_CATEGORY ),
+  BaseComponent( "EXD Viewer", TOOLS_MENU_CATEGORY ),
   m_openSheet( -1 ),
   m_fieldCount( 0 )
 {
@@ -64,11 +64,10 @@ void ExdViewer::onRender()
   ImGui::SetNextWindowSize( ImVec2( 800, 600 ), ImGuiCond_FirstUseEver );
 
   static ImGuiTextFilter exdSheetFilter;
-  static ImGuiTextFilter exdDataFilter;
 
   auto initialY = ImGui::GetCursorPosY();
 
-  ImGui::Begin( m_name.c_str(), &m_isEnabled, NULL );
+  ImGui::Begin( m_name.c_str(), &m_isEnabled );
   {
     exdSheetFilter.Draw( "", SIDEBAR_WIDTH );
 
@@ -95,8 +94,12 @@ void ExdViewer::onRender()
     {
       ImGui::BeginGroup();
 
-      exdDataFilter.Draw();
+      ImGui::BeginChild( "scrolling", ImVec2( 0, 0 ), true,
+                         ImGuiWindowFlags_HorizontalScrollbar );
+
       renderCurrentSheet();
+
+      ImGui::EndChild();
 
       ImGui::EndGroup();
     }
@@ -120,9 +123,7 @@ void ExdViewer::renderCurrentSheet()
     ImGui::NextColumn();
   }
 
-  const float font_size = ImGui::GetFontSize();
-
-  ImGuiListClipper clipper( m_rows.size(), font_size );
+  ImGuiListClipper clipper( m_rows.size() );
 
   while( clipper.Step() )
   {
@@ -130,6 +131,7 @@ void ExdViewer::renderCurrentSheet()
     {
       auto& row = m_rows[ i ];
 
+      ImGui::SetNextItemWidth( 20 );
       ImGui::Text( "%d", i );
       ImGui::NextColumn();
 
@@ -174,6 +176,10 @@ void ExdViewer::renderCurrentSheet()
           case xiv::exd::DataType::uint64:
             ImGui::Text( "%llu", std::get< uint64_t >( col ) );
             break;
+
+          default:
+            ImGui::Text( "{unknown type}");
+            break;
         }
 
         ImGui::NextColumn();
@@ -187,7 +193,7 @@ void ExdViewer::renderCurrentSheet()
 
 void ExdViewer::selectSheet( uint16_t id )
 {
-  Logger::debug( "Selected sheet: {}", id );
+//  Logger::debug( "Selected sheet: {}", id );
   m_openSheet = id;
 
   try

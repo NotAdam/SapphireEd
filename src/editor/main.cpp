@@ -422,15 +422,12 @@ int main( int, char** )
   // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
   // - Read 'misc/fonts/README.txt' for more instructions and details.
   // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-  io.Fonts->AddFontFromFileTTF("./fonts/Roboto-Medium.ttf", 15.0f);
+  io.Fonts->AddFontFromFileTTF("./data/fonts/Roboto-Medium.ttf", 15.0f);
+//  io.Fonts->AddFontDefault();
 
   ImFontConfig config;
   config.MergeMode = true;
-  io.Fonts->AddFontFromFileTTF("./fonts/KosugiMaru-Regular.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesJapanese());
-//  io.Fonts->AddFontDefault();
-//  io.Fonts->AddFontFromFileTTF("./fonts/Cousine-Regular.ttf", 15.0f);
-//  io.Fonts->AddFontFromFileTTF("./fonts/DroidSans.ttf", 16.0f);
-//  io.Fonts->AddFontFromFileTTF("./fonts/ProggyTiny.ttf", 10.0f);
+  io.Fonts->AddFontFromFileTTF("./data/fonts/KosugiMaru-Regular.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesJapanese());
 
   // Upload Fonts
   {

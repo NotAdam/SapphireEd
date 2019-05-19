@@ -6,7 +6,7 @@ file( GLOB EDITOR_SOURCE_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
         Rendering/Ext/*.cpp
         Component/*.cpp
         Component/Debug/*.cpp
-        Component/Exd/*.cpp
+        Component/Tools/*.cpp
         Util/*.cpp)
 
 add_executable( sapphire_ed ${EDITOR_SOURCE_FILES} )
@@ -25,5 +25,5 @@ file( MAKE_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/fonts )
 add_custom_command(
         TARGET sapphire_ed POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/fonts
-        ${EXECUTABLE_OUTPUT_PATH}/fonts )
+        ${CMAKE_SOURCE_DIR}/data
+        ${EXECUTABLE_OUTPUT_PATH}/data )

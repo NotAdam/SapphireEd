@@ -13,6 +13,9 @@ namespace Sapphire::Editor
 
   class EditorMgr;
   using EditorMgrPtr = std::shared_ptr< EditorMgr >;
+
+  class ConfigMgr;
+  using ConfigMgrPtr = std::shared_ptr< ConfigMgr >;
 }
 
 namespace xiv
